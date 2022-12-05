@@ -1,5 +1,9 @@
 # Kafka Streams Test Applikation
 
+Dieses Projekt wurde von [sfnipt](https://github.com/sfnipt)/[silfank](https://github.com/silfank) und [tisuter](https://github.com/tisuter) erstellt im Rahmen eines Techbiers.
+Dieses Repo hier dient nur als Übergangskopie. Das ursprüngliche Techbier-Repo enthält zudem die Aufgaben, die im Techbier gelöst wurden. Dieses Repo hat nur die Lösungen.
+Ursprüngliches Repo: [techbier-repo](https://github.com/sfnipt/techbier-kafka-streams)
+
 ## Kafka Cluster
 Im Projekt bfinden sich zwei docker-compose files um sich lokal einen Cluster installieren zu können. Es stehen zwei Distributionen zur Auswahl:
 - RedPanda
