@@ -1,0 +1,11 @@
+meta:
+  name: local-cluster
+  environment: local-env
+  region: local-region
+  description: |
+    Test cluster that uses plaintext access to brokers. Can be run against compose setup defined
+    in docker-compose.yml in the docker folder (confluent kafka or redpanda).
+
+spec:
+  bootstrapAddrs:
+    - localhost:9092

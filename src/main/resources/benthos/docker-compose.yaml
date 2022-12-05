@@ -1,0 +1,23 @@
+version: '3.7'
+
+services:
+  benthos-consumer:
+    container_name: "benthos-consumer"
+    hostname: "benthos-consumer"
+    image: jeffail/benthos
+    volumes:
+      - "./consumer.yaml:/benthos.yaml"
+      - "../protobuf/SimpleTestMessage.proto:/schema/SimpleTestMessage.proto"
+    network_mode: "host"
+    ports:
+      - '4196:4196'
+  benthos-producer:
+    container_name: "benthos-producer"
+    hostname: "benthos-producer"
+    image: jeffail/benthos
+    volumes:
+      - "./producer.yaml:/benthos.yaml"
+      - "../protobuf/SimpleTestMessage.proto:/schema/SimpleTestMessage.proto"
+    network_mode: "host"
+    ports:
+      - '4197:4197'

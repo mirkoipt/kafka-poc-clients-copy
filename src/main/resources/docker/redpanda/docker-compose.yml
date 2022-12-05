@@ -1,0 +1,88 @@
+#
+# Docker does not delete the content of the volumes with a 'docker compose down' command.
+# This leads to a problem if this script is run after an individual broker has been started.
+# Delete the volumes before executing this script
+#
+
+version: '3.7'
+networks:
+  redpandanet:
+    driver: bridge
+volumes:
+  redpandasr:
+  redpanda1:
+  redpanda2:
+  redpanda3:
+
+services:
+  # Schema Registry and Admin Interface
+  redpanda-sr:
+    image: docker.redpanda.com/vectorized/redpanda
+    container_name: redpanda-sr
+    hostname: redpanda-sr
+    command:
+      - redpanda start --smp 1 --reserve-memory 0M --overprovisioned --node-id 3 --seeds redpanda-1:33145 --check=false
+      - --kafka-addr PLAINTEXT://0.0.0.0:29091,OUTSIDE://0.0.0.0:9095 --advertise-kafka-addr PLAINTEXT://redpanda-sr:29091,OUTSIDE://localhost:9095
+      - --pandaproxy-addr PLAINTEXT://0.0.0.0:28082,OUTSIDE://0.0.0.0:8085 --advertise-pandaproxy-addr PLAINTEXT://redpanda-sr:28082,OUTSIDE://localhost:8085
+      - --rpc-addr PLAINTEXT://0.0.0.0:33148 --advertise-rpc-addr PLAINTEXT://redpanda-sr:33148
+    ports:
+      - 8081:8081 # Schema Registry
+      - 9644:9644 # Admin API
+      - 9095:9095 # There is also a broker in this container
+    networks:
+      - redpandanet
+    volumes:
+      - redpandasr:/var/lib/redpanda/data
+
+  # Broker 1
+  redpanda-1:
+    image: docker.redpanda.com/vectorized/redpanda
+    container_name: redpanda-1
+    hostname: redpanda-1
+    command:
+      - redpanda start --smp 1 --reserve-memory 0M --overprovisioned --node-id 0 --check=false
+      - --kafka-addr PLAINTEXT://0.0.0.0:29092,OUTSIDE://0.0.0.0:9092 --advertise-kafka-addr PLAINTEXT://redpanda-1:29092,OUTSIDE://localhost:9092
+      - --pandaproxy-addr PLAINTEXT://0.0.0.0:28082,OUTSIDE://0.0.0.0:8082 --advertise-pandaproxy-addr PLAINTEXT://redpanda-1:28082,OUTSIDE://localhost:8082
+      - --rpc-addr PLAINTEXT://0.0.0.0:33145 --advertise-rpc-addr PLAINTEXT://redpanda-1:33145
+    ports:
+      - 8082:8082
+      - 9092:9092
+    networks:
+      - redpandanet
+    volumes:
+      - redpanda1:/var/lib/redpanda/data
+
+  # Broker 2
+  redpanda-2:
+    image: docker.redpanda.com/vectorized/redpanda
+    container_name: redpanda-2
+    hostname: redpanda-2
+    command:
+      - redpanda start --smp 1 --reserve-memory 0M --overprovisioned --node-id 1 --seeds redpanda-1:33145 --check=false
+      - --kafka-addr PLAINTEXT://0.0.0.0:29093,OUTSIDE://0.0.0.0:9093 --advertise-kafka-addr PLAINTEXT://redpanda-2:29093,OUTSIDE://localhost:9093
+      - --pandaproxy-addr PLAINTEXT://0.0.0.0:28083,OUTSIDE://0.0.0.0:8083 --advertise-pandaproxy-addr PLAINTEXT://redpanda-2:28083,OUTSIDE://localhost:8083
+      - --rpc-addr PLAINTEXT://0.0.0.0:33146 --advertise-rpc-addr PLAINTEXT://redpanda-2:33146
+    ports:
+      - 8083:8083
+      - 9093:9093
+    networks:
+      - redpandanet
+    volumes:
+      - redpanda2:/var/lib/redpanda/data
+
+  # Broker 3
+  redpanda-3:
+    image: docker.redpanda.com/vectorized/redpanda
+    container_name: redpanda-3
+    command:
+      - redpanda start --smp 1 --reserve-memory 0M --overprovisioned --node-id 2 --seeds redpanda-1:33145 --check=false
+      - --kafka-addr PLAINTEXT://0.0.0.0:29094,OUTSIDE://0.0.0.0:9094 --advertise-kafka-addr PLAINTEXT://redpanda-3:29094,OUTSIDE://localhost:9094
+      - --pandaproxy-addr PLAINTEXT://0.0.0.0:28084,OUTSIDE://0.0.0.0:8084 --advertise-pandaproxy-addr PLAINTEXT://redpanda-3:28084,OUTSIDE://localhost:8084
+      - --rpc-addr PLAINTEXT://0.0.0.0:33147 --advertise-rpc-addr PLAINTEXT://redpanda-3:33147
+    ports:
+      - 8084:8084
+      - 9094:9094
+    networks:
+      - redpandanet
+    volumes:
+      - redpanda3:/var/lib/redpanda/data

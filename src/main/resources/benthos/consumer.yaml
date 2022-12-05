@@ -1,0 +1,18 @@
+http:
+  enabled: false
+
+input:
+  kafka:
+    addresses: [ host.docker.internal:9092 ]
+    topics: [ protobuf-test ]
+    consumer_group: test_group
+
+pipeline:
+  processors:
+    - protobuf:
+        operator: to_json
+        message: ch.ipt.kafka.protobuf.SimpleTestMessage
+        import_paths: [ schema ]
+
+output:
+  stdout: {}

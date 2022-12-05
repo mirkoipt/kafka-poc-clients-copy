@@ -1,0 +1,94 @@
+http:
+  enabled: true
+  address: 0.0.0.0:4195
+  root_path: /benthos
+  debug_endpoints: false
+  cert_file: ""
+  key_file: ""
+  cors:
+    enabled: false
+    allowed_origins: []
+input:
+  label: ""
+  stdin:
+    codec: lines
+    max_buffer: 1000000
+buffer:
+  none: {}
+pipeline:
+  threads: -1
+  processors: []
+output:
+  label: ""
+  kafka:
+    addresses: []
+    tls:
+      enabled: false
+      skip_cert_verify: false
+      enable_renegotiation: false
+      root_cas: ""
+      root_cas_file: ""
+      client_certs: []
+    sasl:
+      mechanism: none
+      user: ""
+      password: ""
+      access_token: ""
+      token_cache: ""
+      token_key: ""
+    topic: ""
+    client_id: benthos
+    target_version: 2.0.0
+    rack_id: ""
+    key: ""
+    partitioner: fnv1a_hash
+    partition: ""
+    compression: none
+    static_headers: {}
+    metadata:
+      exclude_prefixes: []
+    inject_tracing_map: ""
+    max_in_flight: 64
+    ack_replicas: false
+    max_msg_bytes: 1000000
+    timeout: 5s
+    retry_as_batch: false
+    batching:
+      count: 0
+      byte_size: 0
+      period: ""
+      check: ""
+      processors: []
+    max_retries: 0
+    backoff:
+      initial_interval: 3s
+      max_interval: 10s
+      max_elapsed_time: 30s
+logger:
+  level: INFO
+  format: logfmt
+  add_timestamp: false
+  static_fields:
+    '@service': benthos
+  file:
+    path: ""
+    rotate: false
+    rotate_max_age_days: 0
+metrics:
+  prometheus:
+    use_histogram_timing: false
+    histogram_buckets: []
+    add_process_metrics: false
+    add_go_metrics: false
+    push_url: ""
+    push_interval: ""
+    push_job_name: benthos_push
+    push_basic_auth:
+      username: ""
+      password: ""
+    file_output_path: ""
+  mapping: ""
+tracer:
+  none: {}
+shutdown_timeout: 20s
+

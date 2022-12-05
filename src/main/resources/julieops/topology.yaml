@@ -1,0 +1,43 @@
+context: "ipt"
+source: "kafka"
+projects:
+  - name: "poc"
+    topics:
+      - name: "transactions"
+        config:
+          num.partitions: "6"
+          retention.ms: "300000"
+      - name: "accounts"
+        config:
+          num.partitions: "8"
+          cleanup.policy: "compact"
+      - name: "total-of-transactions"
+        config:
+          num.partitions: "6"
+      - name: "filtered-transactions"
+        config:
+          num.partitions: "6"
+      - name: "grouped-transactions"
+        config:
+          num.partitions: "6"
+      - name: "filtered-join"
+        config:
+          num.partitions: "6"
+      - name: "rounded-transactions"
+        config:
+          num.partitions: "6"
+      - name: "credit-transactions"
+        config:
+          num.partitions: "6"
+      - name: "debit-transactions"
+        config:
+          num.partitions: "6"
+      - name: "undefined-transactions"
+        config:
+          num.partitions: "6"
+      - name: "transactions-last-minute"
+        config:
+          num.partitions: "6"
+      - name: "transactions-intermediate-count"
+        config:
+          num.partitions: "6"

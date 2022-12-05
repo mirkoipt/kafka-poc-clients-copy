@@ -1,0 +1,27 @@
+http:
+  enabled: false
+
+input:
+  generate:
+    count: 100
+    interval: 5s
+    mapping: |
+        {
+          "content": "test",
+          "date_time": ""
+        }
+      
+pipeline:
+  processors:
+    - bloblang: |
+        root.content = this.content
+        root.date_time = now().ts_format("2006-01-02 15:04:05")
+    - protobuf:
+        operator: from_json
+        message: ch.ipt.kafka.protobuf.SimpleTestMessage
+        import_paths: [ schema ]
+
+output:
+  kafka:
+    addresses: [ host.docker.internal:9092 ]
+    topic: protobuf-test
